@@ -4,7 +4,7 @@ CONFIG += plugin
 QT = core network qml
 
 TARGET = fluentd-qml
-TARGETPATH = me/qtquick/qmlplugins
+TARGETPATH = me/qtquick/Fluentd
 
 HEADERS += \
     fluentd.h \

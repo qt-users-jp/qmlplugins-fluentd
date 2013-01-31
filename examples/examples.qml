@@ -25,7 +25,7 @@
  */
 
 import QtQuick 2.0
-import me.qtquick.qmlplugins 0.1
+import me.qtquick.Fluentd 0.1
 
 Rectangle {
     width: 360

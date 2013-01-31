@@ -39,7 +39,7 @@ class Plugin : public QQmlExtensionPlugin
 
 public:
     void registerTypes(const char *uri) {
-        // @uri me.qtquick
+        // @uri me.qtquick.Fluentd
         qmlRegisterType<Fluentd>(uri, 0, 1, "Fluentd");
     }
 };
