@@ -8,7 +8,7 @@ TARGETPATH = me/qtquick/qmlplugins
 
 HEADERS += \
     fluentd.h \
-    qml-fluentd-plugin.h
+    plugin.h
 
 SOURCES += \
     fluentd.cpp

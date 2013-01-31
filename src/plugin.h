@@ -24,15 +24,15 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef QML_FLUENTD_PLUGIN_H
-#define QML_FLUENTD_PLUGIN_H
+#ifndef PLUGIN_H
+#define PLUGIN_H
 
 #include <QtQml/QQmlExtensionPlugin>
 #include <QtQml/qqml.h>
 
 #include "fluentd.h"
 
-class QmlFluentdPlugin : public QQmlExtensionPlugin
+class Plugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface");
@@ -44,4 +44,4 @@ public:
     }
 };
 
-#endif // QML_FLUENTD_PLUGIN_H
+#endif // PLUGIN_H
