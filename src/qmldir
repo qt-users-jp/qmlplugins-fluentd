@@ -1,2 +1,0 @@
-module me.qtquick.Fluentd
-plugin fluentd-qml

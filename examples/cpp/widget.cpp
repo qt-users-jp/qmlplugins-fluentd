@@ -24,28 +24,46 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-import QtQuick 2.0
-import me.qtquick.Fluentd 0.1
+#include "widget.h"
+#include "ui_widget.h"
 
-Rectangle {
-    width: 360
-    height: 360
+Widget::Widget(QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::Widget)
+{
+    ui->setupUi(this);
 
-    Fluentd {
-        id: fluentd
-    }
-
-    Component.onCompleted: fluentd.send('debug.qml-fluentd-plugin', {'event': 'Component.onCompleted'})
-
-    Text {
-        anchors.centerIn: parent
-        text: "Hello World"
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            fluentd.send('debug.qml-fluentd-plugin', {'event': 'MouseArea.onClicked'})
+    connect(ui->buttonBox, &QDialogButtonBox::rejected, this, &QDialog::close);
+    connect(ui->tag, &QLineEdit::returnPressed, [=] {
+        if (!ui->tag->text().isEmpty()) {
+            ui->log->setFocus();
         }
-    }
+    });
+
+    QPushButton *send = ui->buttonBox->addButton(tr("&Send"), QDialogButtonBox::AcceptRole);
+    send->setDefault(true);
+    connect(send, &QPushButton::clicked, [=] {
+        QString tag = ui->tag->text();
+        if (tag.isEmpty()) {
+            ui->tag->setFocus();
+            return;
+        }
+        QString log = ui->log->text();
+        if (log.isEmpty()) {
+            ui->log->setFocus();
+            return;
+        }
+
+        QJsonObject object;
+        object.insert("log", log);
+        if (fluentd.send(tag, object)) {
+            ui->log->clear();
+        }
+        ui->log->setFocus();
+    });
+}
+
+Widget::~Widget()
+{
+    delete ui;
 }

@@ -1,4 +1,2 @@
-TEMPLATE = subdirs
-SUBDIRS = src
-
-OTHER_FILES += LICENSE README
+load(qt_parts)
+OTHER_FILES += LICENSE README .qmake.conf sync.profile

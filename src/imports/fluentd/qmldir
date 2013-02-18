@@ -1,0 +1,3 @@
+module QtFluentd
+plugin declarative_fluentd
+typeinfo plugins.qmltypes

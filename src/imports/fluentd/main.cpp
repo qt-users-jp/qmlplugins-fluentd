@@ -24,24 +24,23 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PLUGIN_H
-#define PLUGIN_H
-
 #include <QtQml/QQmlExtensionPlugin>
 #include <QtQml/qqml.h>
 
-#include "fluentd.h"
+#include <qfluentd.h>
 
-class Plugin : public QQmlExtensionPlugin
+class QmlFluentdPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface");
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QQmlExtensionInterface")
 
 public:
-    void registerTypes(const char *uri) {
-        // @uri me.qtquick.Fluentd
-        qmlRegisterType<Fluentd>(uri, 0, 1, "Fluentd");
+    virtual void registerTypes(const char *uri)
+    {
+        Q_ASSERT(QLatin1String(uri) == QLatin1String("QtFluentd"));
+        // @uri QtFluentd
+        qmlRegisterType<QFluentd>(uri, 0, 1, "Fluentd");
     }
 };
 
-#endif // PLUGIN_H
+#include "main.moc"

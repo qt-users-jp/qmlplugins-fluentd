@@ -1,23 +1,8 @@
-TEMPLATE = lib
-CONFIG += plugin
+TEMPLATE = subdirs
+SUBDIRS = fluentd
 
-QT = core network qml
-
-TARGET = fluentd-qml
-TARGETPATH = me/qtquick/Fluentd
-
-HEADERS += \
-    fluentd.h \
-    plugin.h
-
-SOURCES += \
-    fluentd.cpp
-
-target.path = $$[QT_INSTALL_QML]/$$TARGETPATH
-
-qmldir.files = qmldir
-qmldir.path = $$[QT_INSTALL_QML]/$$TARGETPATH
-
-INSTALLS = target qmldir
-
-OTHER_FILES += qmldir
+!isEmpty(QT.qml.name) {
+    src_imports.subdir = imports
+    src_imports.depends = fluentd
+    SUBDIRS += src_imports
+}

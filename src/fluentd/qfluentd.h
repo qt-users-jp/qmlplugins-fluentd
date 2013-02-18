@@ -24,56 +24,75 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FLUENTD_H
-#define FLUENTD_H
+#ifndef QFLUENTD_H
+#define QFLUENTD_H
 
 #include <QtCore/QObject>
+#include <QtNetwork/QAbstractSocket>
 
-class Fluentd : public QObject
+#ifdef FLUENTD_LIBRARY
+# define FLUENTD_EXPORT Q_DECL_EXPORT
+#else
+# define FLUENTD_EXPORT Q_DECL_IMPORT
+#endif
+
+class FLUENTD_EXPORT QFluentd : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(ConnectionType connectionType READ connectionType WRITE connectionType NOTIFY connectionTypeChanged)
-    Q_PROPERTY(QString host READ host WRITE host NOTIFY hostChanged)
-    Q_PROPERTY(int port READ port WRITE port NOTIFY portChanged)
-    Q_PROPERTY(QString socket READ socket WRITE socket NOTIFY socketChanged)
+    Q_PROPERTY(ConnectionState connectionState READ connectionState WRITE setConnectionState NOTIFY connectionStateChanged)
+    Q_PROPERTY(ConnectionType connectionType READ connectionType WRITE setConnectionType NOTIFY connectionTypeChanged)
+    Q_PROPERTY(QString host READ host WRITE setHost NOTIFY hostChanged)
+    Q_PROPERTY(int port READ port WRITE setPort NOTIFY portChanged)
+    Q_PROPERTY(QString socket READ socket WRITE setSocket NOTIFY socketChanged)
+    Q_ENUMS(ConnectionState)
     Q_ENUMS(ConnectionType)
 
 public:
+    enum ConnectionState
+    {
+        UnconnectedState = QAbstractSocket::UnconnectedState,
+        HostLookupState = QAbstractSocket::HostLookupState,
+        ConnectingState = QAbstractSocket::ConnectingState,
+        ConnectedState = QAbstractSocket::ConnectedState,
+        ClosingState = QAbstractSocket::ClosingState
+    };
+
     enum ConnectionType {
         TcpSocket,
         UnixDomainSocket
     };
 
-    explicit Fluentd(QObject *parent = 0);
+    explicit QFluentd(QObject *parent = 0);
 
-    Q_INVOKABLE void send(const QString &tag, const QJsonObject &value);
+    ConnectionState connectionState() const;
+    ConnectionType connectionType() const;
+    const QString &host() const;
+    int port() const;
+    const QString &socket() const;
+
+    Q_INVOKABLE bool send(const QString &tag, const QJsonObject &value);
+
+public slots:
+    void setConnectionType(ConnectionType connectionType);
+    void setHost(const QString &host);
+    void setPort(int port);
+    void setSocket(const QString &socket);
+
 
 signals:
+    void connectionStateChanged(ConnectionState connectionState);
+    void connectionTypeChanged(ConnectionType connectionType);
     void hostChanged(const QString &host);
     void portChanged(int port);
-    void connectionTypeChanged(bool connectionType);
     void socketChanged(const QString &socket);
+
+protected:
+    void setConnectionState(ConnectionState connectionState);
 
 private:
     class Private;
     Private *d;
-
-#define ADD_PROPERTY(type, name, type2) \
-public: \
-    type name() const { return m_##name; } \
-    void name(type name) { \
-        if (m_##name == name) return; \
-        m_##name = name; \
-        emit name##Changed(name); \
-    } \
-private: \
-    type2 m_##name;
-
-    ADD_PROPERTY(ConnectionType, connectionType, ConnectionType)
-    ADD_PROPERTY(const QString &, host, QString)
-    ADD_PROPERTY(int, port, int)
-    ADD_PROPERTY(const QString &, socket, QString)
 };
 
-#endif // FLUENTD_H
+#endif // QFLUENTD_H
