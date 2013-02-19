@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET = fluentd
+TARGET = fluentd-widget
 QT += widgets fluentd
 CONFIG += c++11
 SOURCES = main.cpp
