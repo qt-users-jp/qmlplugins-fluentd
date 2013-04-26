@@ -7,4 +7,4 @@ SOURCES += main.cpp
 
 load(qml_plugin)
 
-OTHER_FILES = plugins.qmltypes
+OTHER_FILES = plugins.qmltypes qmldir
